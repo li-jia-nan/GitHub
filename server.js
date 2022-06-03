@@ -3,7 +3,12 @@ const Router = require('koa-router');
 const next = require('next');
 const session = require('koa-session');
 const Redis = require('ioredis');
+const axios = require('axios');
 const RedisSessionStore = require('./src/server/session-store');
+const config = require('./src/utils/getNextConfig');
+const auth = require('./src/server/auth');
+
+const { request_token_url, ClientID, ClientSecrets } = config.github;
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -21,21 +26,26 @@ app.prepare().then(() => {
   const router = new Router();
   server.keys = ['aaa'];
   server.use(session(SESSION_CONFIG, server));
-  router.get('/api/user', async (ctx, next) => {
-    ctx.session.user = {
-      name: 'sdsd',
-      age: 18,
-    };
-    ctx.body = 'sdsffdf';
-    await next();
+  auth(server);
+  router.get('/api/user/info', async ctx => {
+    const { userInfo } = ctx.session || {};
+    if (userInfo) {
+      ctx.body = userInfo;
+      ctx.set('Content-Type', 'application/json');
+    } else {
+      ctx.status = 401;
+      ctx.body = 'Need Login';
+    }
   });
+  server.use(router.routes());
+
   server.use(async (ctx, next) => {
-    // ctx.cookies.set('id', 'userid:xxxxx')
     ctx.req.session = ctx.session;
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
+    await next();
   });
-  server.use(router.routes());
+
   server.listen(3000, () => {
     console.log('koa listen on 3000');
   });

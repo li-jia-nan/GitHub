@@ -19,6 +19,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/server/session-store.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/server/session-store.js", "server.js"],
   "exclude": ["node_modules"]
 }
