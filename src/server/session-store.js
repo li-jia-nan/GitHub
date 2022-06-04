@@ -1,13 +1,17 @@
+// import Redis, { RedisKey } from 'ioredis';
+const Redis = require('ioredis');
+
 const getRedisSessionId = sid => {
   return `ssid:${sid}`;
 };
 
 class RedisSessionStore {
+  client;
   constructor(client) {
     this.client = client;
   }
   //获取Redis中存储的session数据
-  async get(sid) {
+  get = async sid => {
     console.log('get session', sid);
     const id = getRedisSessionId(sid);
     const data = await this.client.get(id);
@@ -19,9 +23,9 @@ class RedisSessionStore {
     } catch (err) {
       console.error(err);
     }
-  }
+  };
   // 存储session数据到redis
-  async set(sid, sess, ttl) {
+  set = async (sid, sess, ttl) => {
     console.log('set session', sid);
     const id = getRedisSessionId(sid);
     if (typeof ttl === 'number') {
@@ -37,13 +41,14 @@ class RedisSessionStore {
     } catch (err) {
       console.error(err);
     }
-  }
+  };
   // 从reids当中删除某个session
-  async destroy(sid) {
+  destroy = async sid => {
     console.log('destroy session', sid);
     const id = getRedisSessionId(sid);
     await this.client.del(id);
-  }
+  };
 }
 
 module.exports = RedisSessionStore;
+// export default RedisSessionStore;

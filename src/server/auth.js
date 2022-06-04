@@ -1,9 +1,14 @@
 const axios = require('axios');
-const config = require('../utils/getNextConfig');
+const config = require('../../getNextConfig');
+// import Koa, { DefaultContext, DefaultState } from 'koa';
+// import axios from 'axios';
+// import { GITHUB_OAUTH_URL, OAUTH_URL, github } from '../utils/getNextConfig';
 
-const { request_token_url, ClientID, ClientSecrets } = config.github;
+const { github } = config.publicRuntimeConfig;
 
-module.exports = server => {
+const { request_token_url, ClientID, ClientSecrets } = github;
+
+const auth = server => {
   server.use(async (ctx, next) => {
     const { path, query } = ctx;
     if (path === '/auth') {
@@ -62,3 +67,6 @@ module.exports = server => {
     }
   });
 };
+
+module.exports = auth;
+// export default auth;

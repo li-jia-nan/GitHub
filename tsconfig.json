@@ -19,6 +19,14 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/server/session-store.js", "server.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/server/session-store.js",
+    "server.js",
+    "src/server/auth.js",
+    "getNextConfig.js"
+  ],
   "exclude": ["node_modules"]
 }
