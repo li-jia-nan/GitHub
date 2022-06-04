@@ -1,11 +1,15 @@
-import react from 'react';
+import react, { useEffect } from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next/types';
-import { Button, Typography } from 'antd';
+import { Typography } from 'antd';
+import axios from 'axios';
 
 const { Link } = Typography;
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    axios.get('/api/user/info').then(console.log);
+  }, []);
   return (
     <div>
       <Head>
